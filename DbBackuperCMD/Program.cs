@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
 
 namespace DbBackuperCMD
 {
@@ -27,6 +26,27 @@ namespace DbBackuperCMD
                             db = new ParkingContext();
                             List<Client> clients = db.Clients.ToList();
                             List<Car> cars = db.Cars.ToList();
+
+                            int size = clients.Count;
+                            int[] arrSource = new int[size];
+                            int[] arrCopy = new int[size];
+
+                            for (int i = 0; i < size; i++)
+                            {
+                                arrSource[i] = clients[i].Id;
+                                arrCopy[i] = i + 1;
+                            }
+
+                            foreach (var car in cars)
+                            {
+                                for (int i = 0; i < clients.Count; i++)
+                                {
+                                    if (car.ClientId == arrSource[i])
+                                    {
+                                        car.ClientId = arrCopy[i];
+                                    }
+                                }
+                            }
 
                             BinaryFormatter serializer = new BinaryFormatter();
                             using (FileStream fs = new FileStream("Clients.bin", FileMode.OpenOrCreate))
