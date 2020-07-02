@@ -37,6 +37,24 @@ namespace DbBackuperCMD
                                 arrCopy[i] = i + 1;
                             }
 
+                            // Проверка car.ClientId на наличие в базе. Если не найден, то car.ClientId = 0
+                            for (int i = 0; i < cars.Count; i++)
+                            {
+                                bool trigger = false; ;
+                                for (int j = 0; j < size; j++)
+                                {
+                                    if (cars[i].ClientId == arrSource[j])
+                                    {
+                                        trigger = true;
+                                    }
+                                }
+                                if (!trigger)
+                                {
+                                    cars[i].ClientId = 0;
+                                }
+                            }
+                            ////////////
+
                             foreach (var car in cars)
                             {
                                 for (int i = 0; i < clients.Count; i++)
